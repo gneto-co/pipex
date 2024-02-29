@@ -1,1 +1,2 @@
-7
+int			process1(t_data *d);
+int			process2(t_data *d);
