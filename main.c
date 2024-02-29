@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:29:13 by gabriel           #+#    #+#             */
-/*   Updated: 2024/02/29 16:06:58 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:10:32 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int main(int ac, char *av[]) {
 	ft_free_array(d.args1);
 	ft_free_array(d.args2);
 	free(temp);
+	free(d.cmd1);
+	free(d.cmd2);
 	free(d.outfile);
     return 0;
 }
