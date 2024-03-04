@@ -6,15 +6,15 @@
 #    By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 10:51:25 by gneto-co          #+#    #+#              #
-#    Updated: 2024/03/04 17:10:02 by gneto-co         ###   ########.fr        #
+#    Updated: 2024/03/04 17:19:52 by gneto-co         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex.a
 
 PROJECT_SOURCES = $(addsuffix .c, \
-main \
-pipex \
+main_bonus \
+pipex_bonus \
 )
 
 SOURCES = $(PROJECT_SOURCES)

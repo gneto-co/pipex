@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:29:13 by gabriel           #+#    #+#             */
-/*   Updated: 2024/03/04 11:21:16 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:19:59 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_files/pipex.h"
+#include "pipex_bonus.h"
 #include <stdio.h>
 
 int main(int ac, char *av[]) 
@@ -19,7 +19,7 @@ int main(int ac, char *av[])
 
 	if (ac != 5)
 	{
-		ft_printf("Invalid arguments\nExpected:\n./pipex file1 cmd1 cmd2 file2");
+		ft_printf("Invalid arguments\nExpected:\n./pipex file1 cmd1 cmd2 file2\n");
 		return 10;
 	}
 
@@ -34,26 +34,26 @@ int main(int ac, char *av[])
 	d.cmd1 = ft_multi_strjoin("/bin/%s",d.args1[0]);
 	d.cmd2 = ft_multi_strjoin("/bin/%s",d.args2[0]);
 	
-	// ------------------------------ //
+	// --- print args --- //
 
-	int i;
-	i=0;
-	ft_printf("< %s ", d.infile);
-	while (d.args1[i])
-	{
-		ft_printf("%s ", d.args1[i]);
-		i ++;
-	}
-	ft_putstr("| ");
-	i=0;
-	while (d.args2[i])
-	{
-		ft_printf("%s ", d.args2[i]);
-		i ++;
-	}
-	ft_printf("> %s\n\n", d.outfile);
+	// int i;
+	// i=0;
+	// ft_printf("< %s ", d.infile);
+	// while (d.args1[i])
+	// {
+	// 	ft_printf("%s ", d.args1[i]);
+	// 	i ++;
+	// }
+	// ft_putstr("| ");
+	// i=0;
+	// while (d.args2[i])
+	// {
+	// 	ft_printf("%s ", d.args2[i]);
+	// 	i ++;
+	// }
+	// ft_printf("> %s\n\n", d.outfile);
 	
-	
+	// --- --- //
 	
     if (pipe(d.fd) == -1)
         return 11;
