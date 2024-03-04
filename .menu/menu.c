@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:27:56 by gneto-co          #+#    #+#             */
-/*   Updated: 2024/02/29 14:16:02 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/04 11:05:49 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 // run that in your file
 // cc .menu/* -o .menu_exe && ./.menu_exe
 
-const int 	maps_count = 13;
 char		g_name[] = "pipex";
 char		*g_args[] = {
-	"maps/42.fdf", "maps/flat.fdf", "maps/elem2.fdf", "maps/pyramide.fdf",
-	"maps/pylone.fdf", "maps/100-6.fdf", "maps/mars.fdf",
-	"maps/t1.fdf", "maps/t2.fdf", "maps/ma.fdf",
-	"maps/ro.fdf", "maps/good_job.fdf", "maps/silencio.fdf"
+	"in_file \"grep i\" \"wc -l\" pipex_out",
+	"in_file \"ls -l -a\" \"grep 16\" pipex_out"
+	};
+char		*g_exe[] = {
+	"< in_file grep i | wc -l > original_out",
+	"< in_file ls -l -a | grep 16 > original_out"
 	};
 int			arg_i = 0;
 
@@ -29,11 +30,39 @@ int			arg_i = 0;
 
 static void	ex_0(void)
 {
-	if (arg_i + 1 == maps_count)
-		arg_i = 0;
-	else
-		arg_i++;
-	printf("\nArgument number %d:\n %s\n",arg_i,g_args[arg_i]);
+	char	c = 0;
+    
+	printf("\033]0;Tests Menu\007");
+	while (c != 'q')
+	{
+		fflush(stdout);
+		printf
+		(
+			"\nChose your test:\n"
+			"\n\033[94m 0\x1b[0m < in_file grep # | wc -l > infile"
+			"\n\033[94m 1\x1b[0m < in_file ls -l -a | grep 16 > original_out"
+			"\n ---------"
+			"\n\033[36m c\x1b[0m clear screen"
+			"\n\033[31m q\x1b[0m to quit"
+			"\n\n> "
+		);
+		scanf(" %c", &c);
+		getchar();
+
+		system("clear");
+
+		if (c == 'q')
+			break;
+		else if (c == '0')
+		{
+			arg_i = 0;
+		}
+		else if (c == '1')
+		{
+			arg_i = 1;
+		}
+	}
+	system("clear");
 }
 
 static void	ex_1(void)
@@ -42,8 +71,11 @@ static void	ex_1(void)
 	int		j;
 
 	j = 0;
+	printf("\npipex output:\n\n");
 	str = ft_multi_strjoin(" ./%s %s", g_name, g_args[arg_i]);
 	system(str);
+	printf("\n\noriginal output:\n\n");
+	system(g_exe[arg_i]);
 	free(str);
 }
 static void	ex_2(void)
@@ -182,7 +214,7 @@ static char	main_menu()
 	printf
 	(
 		"\nExecute:\n"
-		"\n\033[35m 0\x1b[0m next map"
+		"\n\033[35m 0\x1b[0m tests menu"
 		"\n\033[93m 1\x1b[0m ./fdf"
 		"\n\033[93m 2\x1b[0m valgrind ./fdf"
 		"\n\033[32m 3\x1b[0m make re"

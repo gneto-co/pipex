@@ -6,27 +6,28 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:29:13 by gabriel           #+#    #+#             */
-/*   Updated: 2024/02/29 16:10:32 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/04 11:21:16 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_files/pipex.h"
 #include <stdio.h>
 
-int main(int ac, char *av[]) {
+int main(int ac, char *av[]) 
+{
 	t_data d;
 
 	if (ac != 5)
-		return 4;
+	{
+		ft_printf("Invalid arguments\nExpected:\n./pipex file1 cmd1 cmd2 file2");
+		return 10;
+	}
 
 	// --- put av[] args into args1 and args2 --- //
-		
-	char	*temp;
-	
 
-	temp = ft_multi_strjoin("%s %s", av[2], av[1]);
-	d.args1 = ft_split(temp, ' ');
+	d.args1 = ft_split(av[2], ' ');
 	d.args2 = ft_split(av[3], ' ');
+	d.infile = ft_strdup(av[1]);
 	d.outfile = ft_strdup(av[4]);
 	
 
@@ -34,12 +35,30 @@ int main(int ac, char *av[]) {
 	d.cmd2 = ft_multi_strjoin("/bin/%s",d.args2[0]);
 	
 	// ------------------------------ //
+
+	int i;
+	i=0;
+	ft_printf("< %s ", d.infile);
+	while (d.args1[i])
+	{
+		ft_printf("%s ", d.args1[i]);
+		i ++;
+	}
+	ft_putstr("| ");
+	i=0;
+	while (d.args2[i])
+	{
+		ft_printf("%s ", d.args2[i]);
+		i ++;
+	}
+	ft_printf("> %s\n\n", d.outfile);
+	
+	
 	
     if (pipe(d.fd) == -1)
-        return 1;
+        return 11;
 
     process1(&d);
-	
     process2(&d);
 
 
@@ -51,9 +70,9 @@ int main(int ac, char *av[]) {
 
 	ft_free_array(d.args1);
 	ft_free_array(d.args2);
-	free(temp);
 	free(d.cmd1);
 	free(d.cmd2);
+	free(d.infile);
 	free(d.outfile);
     return 0;
 }

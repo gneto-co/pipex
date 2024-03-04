@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 19:01:08 by gabriel           #+#    #+#             */
-/*   Updated: 2024/02/29 16:01:47 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/04 10:48:12 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_data
 	char	**args2;
 	char	*cmd1;
 	char	*cmd2;
+	char	*infile;
 	char	*outfile;
 }			t_data;
 
