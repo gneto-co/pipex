@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:58:08 by gneto-co          #+#    #+#             */
-/*   Updated: 2024/03/04 17:20:05 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:47:47 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,31 @@ int	process2(t_data *d)
 		close(outfile_fd);
 		// execute command
 		execve(d->cmd2, d->args2, NULL);
+		// error management
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	return (0);
+}
+
+int	process_n(t_data *d)
+{
+	// open child process
+	d->pid_n[d->i] = fork();
+	if (d->pid_n[d->i] < 0)
+		return (2);
+	// execute if process is a child
+	if (d->pid_n[d->i] == 0)
+	{
+		// put fd[0] instead of std input
+		// and fd[1] instead of std output
+		dup2(d->fd[0], STDIN_FILENO);
+		dup2(d->fd[1], STDOUT_FILENO);
+		// close all because it is what it is
+		close(d->fd[0]);
+		close(d->fd[1]);
+		// exe command
+		execve(d->cmd_n[d->i], d->args_n[d->i], NULL);
 		// error management
 		perror("execve");
 		exit(EXIT_FAILURE);
