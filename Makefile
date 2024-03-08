@@ -6,7 +6,7 @@
 #    By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 10:09:55 by gabriel           #+#    #+#              #
-#    Updated: 2024/03/04 17:20:59 by gneto-co         ###   ########.fr        #
+#    Updated: 2024/03/08 11:25:44 by gneto-co         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ $(BONUS_PROJECT):
 CC = cc
 OBJ = $(PROJECT) $(LIBFT)
 BONUS_OBJ = $(BONUS_PROJECT) $(LIBFT)
-CFLAGS = -Wall -Wextra -Werror -Imlx -I$(LIBFT_PATH) -I$(PROJECT_PATH)
+CFLAGS = -Wall -Wextra -Werror -g -I$(LIBFT_PATH) -I$(PROJECT_PATH)
 
 #--------------------------------------------------------------------------------
 #---------------------------------MAKEFILE RULES---------------------------------

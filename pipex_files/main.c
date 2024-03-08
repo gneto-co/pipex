@@ -6,12 +6,22 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:29:13 by gabriel           #+#    #+#             */
-/*   Updated: 2024/03/04 17:10:53 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:26:15 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include <stdio.h>
+
+void ft_free_data(t_data *d)
+{
+	ft_free_array(d->args1);
+	ft_free_array(d->args2);
+	free(d->cmd1);
+	free(d->cmd2);
+	free(d->infile);
+	free(d->outfile);
+}
 
 int main(int ac, char *av[]) 
 {
@@ -68,11 +78,6 @@ int main(int ac, char *av[])
     waitpid(d.pid1, NULL, 0);
     waitpid(d.pid2, NULL, 0);
 
-	ft_free_array(d.args1);
-	ft_free_array(d.args2);
-	free(d.cmd1);
-	free(d.cmd2);
-	free(d.infile);
-	free(d.outfile);
+	ft_free_data(&d);
     return 0;
 }

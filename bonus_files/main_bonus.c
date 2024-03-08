@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:29:13 by gabriel           #+#    #+#             */
-/*   Updated: 2024/03/07 10:48:57 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/08 11:35:40 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,23 @@ int main(int ac, char *av[])
 		ft_printf("Invalid arguments\nExpected:\n./pipex file1 cmd1 cmd2 cm3 ... cmdn file2\n");
 		return 10;
 	}
+	// --- count the amount of commands --- //
+	
+	d.extra_cmd = ac - 5;
 
 	// --- put av[2 and 3] args into args1 and args2 --- //
 	// --- prepare cmd1 and cmd2 --- //
 
 	d.args1 = ft_split(av[2], ' ');
-	d.args2 = ft_split(av[3], ' ');
+	d.args2 = ft_split(av[3 + d.extra_cmd], ' ');
 	d.cmd1 = ft_multi_strjoin("/bin/%s",d.args1[0]);
 	d.cmd2 = ft_multi_strjoin("/bin/%s",d.args2[0]);
 
 	// --- initialize in and out files --- //
 	
 	d.infile = ft_strdup(av[1]);
-	d.outfile = ft_strdup(av[4]);
+	d.outfile = ft_strdup(av[4 + d.extra_cmd]);
 
-	// --- count the amount of commands --- //
-	
-	d.extra_cmd = ac - 5;
 
 	// --- malloc all _n variables --- //
 	
@@ -53,37 +53,53 @@ int main(int ac, char *av[])
 	i = 0;
 	while (i < d.extra_cmd)
 	{
-		d.args_n[i] = ft_split(av[4 + i], ' ');
+		d.args_n[i] = ft_split(av[3 + i], ' ');
 		d.cmd_n[i] = ft_multi_strjoin("/bin/%s",d.args_n[i][0]);
 		i++;
 	}
 	
-	
 	// --- print args --- //
-
-	// int i;
-	// i=0;
-	// ft_printf("< %s ", d.infile);
-	// while (d.args1[i])
-	// {
-	// 	ft_printf("%s ", d.args1[i]);
-	// 	i ++;
-	// }
-	// ft_putstr("| ");
-	// i=0;
-	// while (d.args2[i])
-	// {
-	// 	ft_printf("%s ", d.args2[i]);
-	// 	i ++;
-	// }
-	// ft_printf("> %s\n\n", d.outfile);
+	int k;
+	k=0;
+	ft_printf("< %s ", d.infile);
+	while (d.args1[k])
+	{
+		ft_printf("%s ", d.args1[k]);
+		k ++;
+	}
+	ft_putstr("| ");
+	
+	//
+	
+	int j=0;
+	k = 0;
+	while (j < d.extra_cmd)
+	{
+		k = 0;
+		while (d.args_n[j][k])
+		{
+			ft_printf("%s ", d.args_n[j][k]);
+			k ++;
+		}
+		ft_putstr("| ");
+		j++;
+	}
+	
+	k=0;
+	while (d.args2[k])
+	{
+		ft_printf("%s ", d.args2[k]);
+		k ++;
+	}
+	ft_printf("> %s\n\n", d.outfile);
+	// --- --- //
 	
 	
 	// --- manage pipe error --- //
-    if (pipe(d.fd) == -1)
-        return 11;
 		
 	
+    if (pipe(d.fd) == -1)
+        return 11;
 	// --- process 1 --- //
     process1(&d);
 	// --- process n --- //
@@ -107,6 +123,7 @@ int main(int ac, char *av[])
 	i = 0;
 	while (i < d.extra_cmd)
 	{
+		ft_printf("\n--- break ---\n");
 		waitpid(d.pid_n[i], NULL, 0);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:58:08 by gneto-co          #+#    #+#             */
-/*   Updated: 2024/03/04 12:07:00 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:28:47 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int	process1(t_data *d)
 		if (infile_fd == -1)
 		{
 			perror("open");
-			return (21);
+			ft_free_data(d);
+			close(d->fd[0]);
+			close(d->fd[1]);
+			exit(21);
 		}
 		// put infile instead of std input
 		// and fd[1] instead of std output
@@ -68,7 +71,11 @@ int	process2(t_data *d)
 		if (outfile_fd == -1)
 		{
 			perror("open");
-			return (31);
+			close(STDIN_FILENO);
+			ft_free_data(d);
+			close(d->fd[0]);
+			close(d->fd[1]);
+			exit(31);
 		}
 		// put outfile instead of std output
 		dup2(outfile_fd, STDOUT_FILENO);

@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 19:01:08 by gabriel           #+#    #+#             */
-/*   Updated: 2024/03/04 10:48:12 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:24:39 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_data
 
 int			process1(t_data *d);
 int			process2(t_data *d);
+void		ft_free_data(t_data *d);
 
 /* *********************************** */
 /*                                     */
