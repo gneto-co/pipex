@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:58:08 by gneto-co          #+#    #+#             */
-/*   Updated: 2024/03/08 13:28:47 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:01:46 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	process2(t_data *d)
 		return (30);
 	// execute if process is a child
 	if (d->pid2 == 0)
-	{
+	{		outfile_fd = open(d->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
 		// put fd[0] instead of std input
 		dup2(d->fd[0], STDIN_FILENO);
 		// close all because it is what it is

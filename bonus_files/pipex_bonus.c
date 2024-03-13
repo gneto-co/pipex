@@ -6,106 +6,75 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:58:08 by gneto-co          #+#    #+#             */
-/*   Updated: 2024/03/08 10:25:38 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:36:02 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-int	process1(t_data *d)
+int	process(t_data *d, int i)
 {
 	int	infile_fd;
-
-	// open child process
-	d->pid1 = fork();
-	if (d->pid1 < 0)
-		return (2);
-	// execute if process is a child
-	if (d->pid1 == 0)
-	{
-		// open infile to read only
-		infile_fd = open(d->infile, O_RDONLY);
-		if (infile_fd == -1)
-		{
-			perror("open");
-			return (21);
-		}
-		// put infile instead of std input
-		// and fd[1] instead of std output
-		dup2(infile_fd, STDIN_FILENO);
-		dup2(d->fd[1], STDOUT_FILENO);
-		// close all because it is what it is
-		close(infile_fd);
-		close(d->fd[0]);
-		close(d->fd[1]);
-		// exe command
-		execve(d->cmd1, d->args1, NULL);
-		// error management
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
-	return (0);
-}
-
-int	process2(t_data *d)
-{
 	int	outfile_fd;
 
-	// open child process
-	d->pid2 = fork();
-	if (d->pid2 < 0)
-		return (30);
-	// execute if process is a child
-	if (d->pid2 == 0)
+// open pipe
+
+	if (pipe((d->p[i]).fd) == -1)
+			return -1;
+
+// open child process
+
+	(d->p[i]).pid = fork();
+	if ((d->p[i]).pid < 0)
+		return (-1);
+		
+// execute if process is a child
+
+	if ((d->p[i]).pid == 0)
 	{
-		// put fd[0] instead of std input
-		dup2(d->fd[0], STDIN_FILENO);
-		// close all because it is what it is
-		close(d->fd[0]);
-		close(d->fd[1]);
-		// open outfile
-		outfile_fd = open(d->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (outfile_fd == -1)
+				
+	// redirect std input
+
+		if (i == 0)
 		{
-			perror("open");
-			return (31);
+			infile_fd = open(d->infile, O_RDONLY);
+			if (infile_fd < 0)
+			{
+				perror("open");
+				return -1;
+			}
+			dup2(infile_fd, STDIN_FILENO);
+			close(infile_fd);
 		}
-		// put outfile instead of std output
-		dup2(outfile_fd, STDOUT_FILENO);
-		close(outfile_fd);
-		// execute command
-		execve(d->cmd2, d->args2, NULL);
-		// error management
-		perror("execve");
+		else
+			dup2((d->p[i - 1]).fd[0], STDIN_FILENO);
+		// close((d->p[i - 1]).fd[0]);
+		close((d->p[i - 1]).fd[1]);
+	// redirect std output
+		
+		if(i > d->extra_cmd)
+		{
+			outfile_fd = open(d->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (outfile_fd < 0)
+			{
+				perror("open");
+				return -1;
+			}
+			dup2(outfile_fd, STDOUT_FILENO);
+			close(outfile_fd);
+		}
+		else
+			dup2((d->p[i]).fd[1], STDOUT_FILENO);
+		close((d->p[i]).fd[0]);
+		close((d->p[i]).fd[1]);
+
+	// execute command
+	
+		// ft_printf("\n-> %s", (d->p[i]).cmd);
+		execve((d->p[i]).cmd, (d->p[i]).args, NULL);
+		perror("execve");	
 		exit(EXIT_FAILURE);
+		
 	}
+
 	return (0);
 }
-
-int	process_n(t_data *d)
-{
-    // open child process
-    d->pid_n[d->i] = fork();
-    if (d->pid_n[d->i] < 0)
-        return (2);
-    // print that shit
-    // execute if process is a child
-    if (d->pid_n[d->i] == 0)
-    {
-        // put fd[0] instead of std input
-        // and fd[1] instead of std output
-        dup2(d->fd[0], STDIN_FILENO);
-        dup2(d->fd[1], STDOUT_FILENO);
-        close(d->fd[0]);
-        // exe command
-        execve(d->cmd_n[d->i], d->args_n[d->i], NULL);
-        // error management
-        perror("execve");
-        exit(EXIT_FAILURE);
-    }
-    // close file descriptors in parent process
-    close(d->fd[0]);
-    close(d->fd[1]);
-    return (0);
-}
-
