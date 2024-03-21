@@ -6,7 +6,7 @@
 #    By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 10:09:55 by gabriel           #+#    #+#              #
-#    Updated: 2024/03/21 12:15:50 by gneto-co         ###   ########.fr        #
+#    Updated: 2024/03/13 16:39:30 by gneto-co         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,26 @@ $(PROJECT):
 
 
 #--------------------------------------------------------------------------------
+#-------------------------BONUS PROJECT SOURCE FILES-----------------------------
+#--------------------------------------------------------------------------------
+
+
+BONUS_PROJECT_PATH = ./bonus_files
+
+BONUS_PROJECT = $(BONUS_PROJECT_PATH)/$(NAME).a
+
+$(BONUS_PROJECT):
+	@$(MAKE) -C $(BONUS_PROJECT_PATH) --no-print-directory
+
+
+#--------------------------------------------------------------------------------
 #--------------------------COMPILATION SPECIFICATIONS----------------------------
 #--------------------------------------------------------------------------------
 # -fsanitize=address
 
 CC = cc
 OBJ = $(PROJECT) $(LIBFT)
+BONUS_OBJ = $(BONUS_PROJECT) $(LIBFT)
 CFLAGS = -Wall -Wextra -Werror -g -I$(LIBFT_PATH) -I$(PROJECT_PATH)
 
 #--------------------------------------------------------------------------------
@@ -59,11 +73,17 @@ $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(CFLAGS) -o $(NAME)
 	@clear
 	@echo "\033[32m\n---------- $(NAME) compiled and ready! ----------\033[0m"
+	
+bonus: $(BONUS_OBJ)
+	$(CC) $(BONUS_OBJ) $(CFLAGS) -o $(NAME)
+	@clear
+	@echo "\033[32m\n---------- $(NAME) compiled and ready! ----------\033[0m"
 
 clean:
 	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_PATH) clean --no-print-directory
 	@$(MAKE) -C $(PROJECT_PATH) clean --no-print-directory
+	@$(MAKE) -C $(BONUS_PROJECT_PATH) clean --no-print-directory
 	@clear
 	@echo "\033[31m\033[33m\n---------- program objects cleaned ----------\033[0m"
 
@@ -71,6 +91,7 @@ fclean: clean
 	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_PATH) fclean --no-print-directory
 	@$(MAKE) -C $(PROJECT_PATH) fclean --no-print-directory
+	@$(MAKE) -C $(BONUS_PROJECT_PATH) fclean --no-print-directory
 	@clear
 	@echo "\033[31m\033[33m\n--------- program name and objects cleaned ----------\033[0m"
 	
