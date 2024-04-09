@@ -6,7 +6,7 @@
 /*   By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:58:08 by gneto-co          #+#    #+#             */
-/*   Updated: 2024/03/21 12:40:09 by gneto-co         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:36:51 by gneto-co         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,21 @@ void	close_pipe(t_data *d)
 	close(d->fd[1]);
 }
 
+static void	p1_spl(t_data *d, int *infile_fd)
+{
+	dup2((*infile_fd), STDIN_FILENO);
+	dup2(d->fd[1], STDOUT_FILENO);
+	close(*infile_fd);
+	close_pipe(d);
+}
+
 int	process1(t_data *d)
 {
 	int	infile_fd;
 
 	d->pid1 = fork();
 	if (d->pid1 < 0)
-		return (2);
+		return (1);
 	if (d->pid1 == 0)
 	{
 		infile_fd = open(d->infile, O_RDONLY);
@@ -33,15 +41,27 @@ int	process1(t_data *d)
 			perror("open");
 			ft_free_data(d);
 			close_pipe(d);
-			exit(21);
+			exit(1);
 		}
-		dup2(infile_fd, STDIN_FILENO);
-		dup2(d->fd[1], STDOUT_FILENO);
-		close(infile_fd);
-		close_pipe(d);
-		execve(d->cmd1, d->args1, NULL);
-		perror("execve");
+		p1_spl(d, &infile_fd);
+		if (execve(d->cmd1, d->args1, NULL) < 0)
+		{
+			perror("execve");
+			ft_free_data(d);
+			exit(1);
+		}
 		exit(EXIT_FAILURE);
+	}
+	return (0);
+}
+
+static int	p2_spl(t_data *d)
+{
+	if (execve(d->cmd2, d->args2, NULL) < 0)
+	{
+		perror("execve");
+		ft_free_data(d);
+		return (1);
 	}
 	return (0);
 }
@@ -52,7 +72,7 @@ int	process2(t_data *d)
 
 	d->pid2 = fork();
 	if (d->pid2 < 0)
-		return (30);
+		return (1);
 	if (d->pid2 == 0)
 	{
 		dup2(d->fd[0], STDIN_FILENO);
@@ -64,12 +84,12 @@ int	process2(t_data *d)
 			close(STDIN_FILENO);
 			ft_free_data(d);
 			close_pipe(d);
-			exit(31);
+			exit(1);
 		}
 		dup2(outfile_fd, STDOUT_FILENO);
 		close(outfile_fd);
-		execve(d->cmd2, d->args2, NULL);
-		perror("execve");
+		if (p2_spl(d))
+			exit(1);
 		exit(EXIT_FAILURE);
 	}
 	return (0);

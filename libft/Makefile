@@ -6,7 +6,7 @@
 #    By: gneto-co <gneto-co@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 10:51:25 by gneto-co          #+#    #+#              #
-#    Updated: 2024/02/22 22:27:00 by gneto-co         ###   ########.fr        #
+#    Updated: 2024/04/09 09:37:51 by gneto-co         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,7 @@ ft_tolower \
 ft_strchr \
 ft_strrchr \
 ft_strncmp \
+ft_find_on_array \
 ft_strnstr \
 ft_split \
 ft_strdup \
